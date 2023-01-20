@@ -1,11 +1,22 @@
-import React from 'react';
+import React, {useReducer} from 'react';
 
 import './App.css';
 
 import TotalDisplay from './TotalDisplay';
 import CalcButton from './CalcButton';
+import { initialState, reducer } from '../reducers/index.reducer.js';
+import { calculateValue, clearScreen, deleteDigit, displayNum } from '../actions/index.actions';
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const change = (e) => {
+
+     dispatch(displayNum(e.target.value))
+     console.log(state)
+  }
+
+  
   return (
     <div className="App">
       <nav className="navbar navbar-dark bg-dark">
@@ -16,44 +27,51 @@ function App() {
         <div className="col-md-12 d-flex justify-content-center">
           <form name="Cal">
             
-            <TotalDisplay value={0}/>
+            <TotalDisplay value={state.screen}/>
             <div className="row details">
-              <span id="operation"><b>Operation:</b> X</span>
+              <span id="operation"><b>Operation:</b> {state.operation}</span>
               <span id="memory"><b>Memory:</b> 0</span>
             </div>
             
             <div className="row">
-              <CalcButton value={"M+"}/>
-              <CalcButton value={"MR"}/>
-              <CalcButton value={"MC"}/>
+              <CalcButton onClick={() => {}} value={"M+"}/>
+              <CalcButton onClick={() => {}} value={"MR"}/>
+              <CalcButton onClick={() => {}} value={"MC"}/>
+              <CalcButton onClick={() => {
+                dispatch(clearScreen())
+              }} value={"CE"}/>
             </div>
 
             <div className="row">
-              <CalcButton value={1}/>
-              <CalcButton value={2}/>
-              <CalcButton value={3}/>
+              <CalcButton onClick={change} value={1}/>
+              <CalcButton onClick={change} value={2}/>
+              <CalcButton onClick={change} value={3}/>
+              <CalcButton onClick={change} value={"+"}/>
             </div>
 
             <div className="row">
-              <CalcButton value={4}/>
-              <CalcButton value={5}/>
-              <CalcButton value={6}/>
+              <CalcButton onClick={change} value={4}/>
+              <CalcButton onClick={change} value={5}/>
+              <CalcButton onClick={change} value={6}/>
+              <CalcButton onClick={change} value={"*"}/>
             </div>
 
             <div className="row">
-              <CalcButton value={7}/>
-              <CalcButton value={8}/>
-              <CalcButton value={9}/>
+              <CalcButton onClick={change} value={7}/>
+              <CalcButton onClick={change} value={8}/>
+              <CalcButton onClick={change} value={9}/>
+              <CalcButton onClick={change} value={"-"}/>
             </div>
 
             <div className="row">
-              <CalcButton value={"+"}/>
-              <CalcButton value={"*"}/>
-              <CalcButton value={"-"}/>
+              <CalcButton onClick={change} value={0} />
+              <CalcButton onClick={() => dispatch(deleteDigit())} value={"DEL"}/>
+              <CalcButton onClick={change} value={"/"}/>
+              <CalcButton onClick={() => dispatch(calculateValue())} value={"="} />
             </div>
 
-            <div className="row ce_button">
-              <CalcButton value={"CE"}/>
+            <div className="row">
+
             </div>
 
           </form>
